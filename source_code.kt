@@ -1,0 +1,80 @@
+/**
+ * You can edit, run, and share this code.
+ * play.kotlinlang.org
+ */
+
+fun main() {
+    println("Hello World!")
+    println("""Hello World""")
+    println('a')
+}
+
+1
+-1
+1.1
+-1.1
+0x1FA
+true
+false
+null
+fun
+class
+val
+var
+if
+else
+for
+while
+when
+as
+is
+in
+continue
+break
+return
+...
+.
+,
+(
+)
+[
+]
+{
+}
+*
+%
+/
++
+-
+++
+--
+&&
+||
+!
+:
+;
+=
++=
+-=
+*=
+/=
+%=
+->
+=>
+..
+..<
+::
+;;
+#
+@
+?
+<
+>
+<=
+>=
+!=
+!== 
+==
+===
+'
+&
