@@ -56,4 +56,9 @@ tokens = [
     "QUOTE_OPEN",
     "TRIPLE_QUOTE_OPEN",
     "ID",
+    "TYPE_STRING",
+    "TYPE_INT",
+    "TYPE_DOUBLE",
+    "TYPE_FLOAT",
+    "TYPE_BOOLEAN",
 ] + list(keywords.values())

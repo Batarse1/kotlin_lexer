@@ -3,7 +3,7 @@ import ply.lex as lex
 
 from keywords import keywords
 from tokens import tokens
-from kotlin_symbols_table import generate_symbols_table
+from kotlin_symbols_table import generate_symbols_table, print_table
 
 t_RESERVED = r"\.\.\."
 t_DOT = r"\."
@@ -54,6 +54,31 @@ t_QUOTE_OPEN = r"\".*\" "
 t_TRIPLE_QUOTE_OPEN = r"\"\"\".*\"\"\""
 
 
+def t_TYPE_STRING(t):
+    r"String"
+    return t
+
+
+def t_TYPE_INT(t):
+    r"Int"
+    return t
+
+
+def t_TYPE_DOUBLE(t):
+    r"Double"
+    return t
+
+
+def t_TYPE_FLOAT(t):
+    r"Float"
+    return t
+
+
+def t_TYPE_BOOLEAN(t):
+    r"Boolean"
+    return t
+
+
 def t_LCURL(t):
     r"\{"
     t.lexer.level += 1
@@ -68,26 +93,31 @@ def t_RCURL(t):
 
 def t_HEX(t):
     r"0[xX][0-9a-fA-F]+"
+    t.value = int(t.value, 16)
     return t
 
 
 def t_FLOAT(t):
     r"-\d+\.\d+ | \d+\.\d+"
+    t.value = float(t.value)
     return t
 
 
 def t_DIGIT(t):
     r"-\d+ | \d+"
+    t.value = int(t.value)
     return t
 
 
 def t_BOOLEAN(t):
     r"true|false"
+    t.value = bool(t.value)
     return t
 
 
 def t_NULL(t):
     r"null"
+    t.value = None
     return t
 
 
@@ -126,15 +156,25 @@ lexer.level = 0
 file = open("source_code.kt", "r")
 
 lexer.input(file.read())
-lexer_clone = lexer.clone()
 
 ply_table = PrettyTable()
 ply_table.field_names = ["Type", "Value", "Line Number", "Position", "level"]
 
+lexer_tokens = []
 for tok in lexer:
+    lexer_tokens.append(
+        {
+            "type": tok.type,
+            "value": tok.value,
+            "line_number": tok.lineno,
+            "position": tok.lexpos,
+            "level": lexer.level,
+        }
+    )
     ply_table.add_row([tok.type, tok.value, tok.lineno, tok.lexpos, lexer.level])
 
 print("PLY Table")
 print(ply_table)
 
-generate_symbols_table(lexer_clone)
+generate_symbols_table(lexer_tokens)
+print_table()
