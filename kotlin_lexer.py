@@ -11,8 +11,6 @@ t_LPAREN = r"\("
 t_RPAREN = r"\)"
 t_LSQUARE = r"\["
 t_RSQUARE = r"\]"
-t_LCURL = r"\{"
-t_RCURL = r"\}"
 t_MULT = r"\*"
 t_MOD = r"\%"
 t_DIV = r"/"
@@ -53,6 +51,18 @@ t_AMP = r"&"
 t_CHARACTER = r"\'(\\.|[^\\\'\n\r])*\'"
 t_QUOTE_OPEN = r"\".*\" "
 t_TRIPLE_QUOTE_OPEN = r"\"\"\".*\"\"\""
+
+
+def t_LCURL(t):
+    r"\{"
+    t.lexer.level += 1
+    return t
+
+
+def t_RCURL(t):
+    r"\}"
+    t.lexer.level -= 1
+    return t
 
 
 def t_HEX(t):
@@ -109,7 +119,8 @@ def t_error(t):
     t.lexer.skip(1)
 
 
-lexer = lex.lex(optimize=1)
+lexer = lex.lex()
+lexer.level = 0
 
 file = open("source_code.kt", "r")
 
@@ -117,14 +128,14 @@ lexer.input(file.read())
 
 ply_table = PrettyTable()
 hashmap_table = PrettyTable()
-ply_table.field_names = ["Type", "Value", "Line Number", "Position"]
+ply_table.field_names = ["Type", "Value", "Line Number", "Position", "level"]
 hashmap_table.field_names = ["Key", "Value"]
 
 hashmap = {}
 
 for tok in lexer:
     hashmap[tok.value] = tok.type
-    ply_table.add_row([tok.type, tok.value, tok.lineno, tok.lexpos])
+    ply_table.add_row([tok.type, tok.value, tok.lineno, tok.lexpos, lexer.level])
 
 for key, value in hashmap.items():
     hashmap_table.add_row([key, value])
