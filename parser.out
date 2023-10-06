@@ -1,0 +1,166 @@
+Created by PLY version 3.11 (http://www.dabeaz.com/ply)
+
+Unused terminals:
+
+    ASSIGNMENT
+    CLASS
+    COMMA
+    CONJ
+    DISJ
+    ELSE
+    FOR
+    FUN
+    IDENTIFIER
+    IF
+    LCURL
+    LPAREN
+    LSQUARE
+    RCURL
+    RETURN
+    RPAREN
+    RSQUARE
+    SEMICOLON
+    VAL
+    VAR
+    WHEN
+    WHILE
+
+Grammar
+
+Rule 0     S' -> elvis
+Rule 1     elvis -> QUEST_NO_WS COLON
+Rule 2     primaryExpression -> literalConstant
+Rule 3     primaryExpression -> stringLiteral
+Rule 4     literalConstant -> INTEGER_LITERAL
+Rule 5     literalConstant -> FLOAT_LITERAL
+Rule 6     literalConstant -> BOOLEAN_LITERAL
+Rule 7     literalConstant -> CHARACTER_LITERAL
+Rule 8     literalConstant -> NULL_LITERAL
+Rule 9     stringLiteral -> lineStringLiteral
+Rule 10    stringLiteral -> multiLineStringLiteral
+Rule 11    lineStringLiteral -> LINE_STR_TEXT
+Rule 12    multiLineStringLiteral -> MULTI_LINE_STR_TEXT
+Rule 13    jumpExpression -> CONTINUE
+Rule 14    jumpExpression -> BREAK
+Rule 15    equalityOperator -> EXCL_EQ
+Rule 16    equalityOperator -> EQEQ
+Rule 17    comparisonOperator -> LANGLE
+Rule 18    comparisonOperator -> RANGLE
+Rule 19    comparisonOperator -> LE
+Rule 20    comparisonOperator -> GE
+Rule 21    inOperator -> IN
+Rule 22    isOperator -> IS
+Rule 23    additiveOperator -> ADD
+Rule 24    additiveOperator -> SUB
+Rule 25    multiplicativeOperator -> MULT
+Rule 26    multiplicativeOperator -> DIV
+Rule 27    multiplicativeOperator -> MOD
+Rule 28    asOperator -> AS
+Rule 29    excl -> EXCL_NO_WS
+Rule 30    memberAccessOperator -> DOT
+Rule 31    memberAccessOperator -> safeNav
+Rule 32    safeNav -> QUEST_NO_WS DOT
+
+Terminals, with rules where they appear
+
+ADD                  : 23
+AS                   : 28
+ASSIGNMENT           : 
+BOOLEAN_LITERAL      : 6
+BREAK                : 14
+CHARACTER_LITERAL    : 7
+CLASS                : 
+COLON                : 1
+COMMA                : 
+CONJ                 : 
+CONTINUE             : 13
+DISJ                 : 
+DIV                  : 26
+DOT                  : 30 32
+ELSE                 : 
+EQEQ                 : 16
+EXCL_EQ              : 15
+EXCL_NO_WS           : 29
+FLOAT_LITERAL        : 5
+FOR                  : 
+FUN                  : 
+GE                   : 20
+IDENTIFIER           : 
+IF                   : 
+IN                   : 21
+INTEGER_LITERAL      : 4
+IS                   : 22
+LANGLE               : 17
+LCURL                : 
+LE                   : 19
+LINE_STR_TEXT        : 11
+LPAREN               : 
+LSQUARE              : 
+MOD                  : 27
+MULT                 : 25
+MULTI_LINE_STR_TEXT  : 12
+NULL_LITERAL         : 8
+QUEST_NO_WS          : 1 32
+RANGLE               : 18
+RCURL                : 
+RETURN               : 
+RPAREN               : 
+RSQUARE              : 
+SEMICOLON            : 
+SUB                  : 24
+VAL                  : 
+VAR                  : 
+WHEN                 : 
+WHILE                : 
+error                : 
+
+Nonterminals, with rules where they appear
+
+additiveOperator     : 
+asOperator           : 
+comparisonOperator   : 
+elvis                : 0
+equalityOperator     : 
+excl                 : 
+inOperator           : 
+isOperator           : 
+jumpExpression       : 
+lineStringLiteral    : 9
+literalConstant      : 2
+memberAccessOperator : 
+multiLineStringLiteral : 10
+multiplicativeOperator : 
+primaryExpression    : 
+safeNav              : 31
+stringLiteral        : 3
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . elvis
+    (1) elvis -> . QUEST_NO_WS COLON
+
+    QUEST_NO_WS     shift and go to state 2
+
+    elvis                          shift and go to state 1
+
+state 1
+
+    (0) S' -> elvis .
+
+
+
+state 2
+
+    (1) elvis -> QUEST_NO_WS . COLON
+
+    COLON           shift and go to state 3
+
+
+state 3
+
+    (1) elvis -> QUEST_NO_WS COLON .
+
+    $end            reduce using rule 1 (elvis -> QUEST_NO_WS COLON .)
+
