@@ -1,6 +1,7 @@
-fun main() {
+fun main(value) {
     println("Hello World")
-    {
-        print("hello")
+    val num = 10 + 10
+    IF(num > 20){
+        return 20
     }
 }

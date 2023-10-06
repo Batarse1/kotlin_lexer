@@ -3,6 +3,7 @@ import ply.lex as lex
 
 from keywords import keywords
 from tokens import tokens
+from kotlin_symbols_table import generate_symbols_table
 
 t_RESERVED = r"\.\.\."
 t_DOT = r"\."
@@ -125,22 +126,15 @@ lexer.level = 0
 file = open("source_code.kt", "r")
 
 lexer.input(file.read())
+lexer_clone = lexer.clone()
 
 ply_table = PrettyTable()
-hashmap_table = PrettyTable()
 ply_table.field_names = ["Type", "Value", "Line Number", "Position", "level"]
-hashmap_table.field_names = ["Key", "Value"]
-
-hashmap = {}
 
 for tok in lexer:
-    hashmap[tok.value] = tok.type
     ply_table.add_row([tok.type, tok.value, tok.lineno, tok.lexpos, lexer.level])
-
-for key, value in hashmap.items():
-    hashmap_table.add_row([key, value])
 
 print("PLY Table")
 print(ply_table)
-print("Hashmap Table")
-print(hashmap_table)
+
+generate_symbols_table(lexer_clone)
