@@ -1,84 +1,24 @@
-from prettytable import PrettyTable
 import ply.lex as lex
+
+from prettytable import PrettyTable
+from kotlin_symbols_table import generate_symbols_table, print_table
 
 from keywords import keywords
 from tokens import tokens
-from kotlin_symbols_table import generate_symbols_table, print_table
 
-t_RESERVED = r"\.\.\."
-t_DOT = r"\."
-t_COMMA = r"\,"
-t_LPAREN = r"\("
-t_RPAREN = r"\)"
-t_LSQUARE = r"\["
-t_RSQUARE = r"\]"
+# Arithmetic Operators
 t_MULT = r"\*"
-t_MOD = r"\%"
 t_DIV = r"/"
+t_MOD = r"\%"
 t_ADD = r"\+"
 t_SUB = r"-"
-t_INCR = r"\+\+"
-t_DECR = r"--"
-t_CONJ = r"&&"
-t_DISJ = r"\|\|"
-t_EXCL_NO_WS = r"\!"
-t_COLON = r"\:"
-t_SEMICOLON = r"\;"
-t_ASSIGNMENT = r"="
-t_ADD_ASSIGNMENT = r"\+="
-t_SUB_ASSIGNMENT = r"-="
-t_MULT_ASSIGNMENT = r"\*="
-t_DIV_ASSIGNMENT = r"/="
-t_MOD_ASSIGNMENT = r"\%="
-t_ARROW = r"->"
-t_DOUBLE_ARROW = r"=>"
-t_RANGE = r"\.\."
-t_RANGE_UNTIL = r"\.\.<"
-t_COLONCOLON = r"\:\:"
-t_DOUBLE_SEMICOLON = r"\;\;"
-t_HASH = r"\#"
-t_AT_NO_WS = r"@"
-t_QUEST_NO_WS = r"\?"
-t_LANGLE = r"\<"
-t_RANGLE = r"\>"
-t_LE = r"\<="
-t_GE = r"\>="
-t_EXCL_EQ = r"\!="
-t_EXCL_EQEQ = r"\!=="
-t_EQEQ = r"=="
-t_EQEQEQ = r"==="
-t_SINGLE_QUOTE = r"\'"
-t_AMP = r"&"
-t_CHARACTER = r"\'(\\.|[^\\\'\n\r])*\'"
-t_QUOTE_OPEN = r"\".*\" "
-t_TRIPLE_QUOTE_OPEN = r"\"\"\".*\"\"\""
+
+# Parentheses
+t_LPAREN = r"\("
+t_RPAREN = r"\)"
 
 
-def t_TYPE_STRING(t):
-    r"String"
-    return t
-
-
-def t_TYPE_INT(t):
-    r"Int"
-    return t
-
-
-def t_TYPE_DOUBLE(t):
-    r"Double"
-    return t
-
-
-def t_TYPE_FLOAT(t):
-    r"Float"
-    return t
-
-
-def t_TYPE_BOOLEAN(t):
-    r"Boolean"
-    return t
-
-
+# Braces
 def t_LCURL(t):
     r"\{"
     t.lexer.level += 1
@@ -91,42 +31,80 @@ def t_RCURL(t):
     return t
 
 
-def t_HEX(t):
-    r"0[xX][0-9a-fA-F]+"
-    t.value = int(t.value, 16)
-    return t
+# Square Brackets
+t_LSQUARE = r"\["
+t_RSQUARE = r"\]"
+
+# Punctuation
+t_SEMICOLON = r"\;"
+t_COLON = r"\:"
+t_COMMA = r"\,"
+t_DOT = r"\."
+
+# Assignment Operator
+t_ASSIGNMENT = r"="
+
+# Comparison Operators
+t_LANGLE = r"\<"
+t_RANGLE = r"\>"
+t_LE = r"\<="
+t_GE = r"\>="
+t_EQEQ = r"=="
+t_EXCL_EQ = r"\!="
+
+# Logical Operators
+t_CONJ = r"&&"
+t_DISJ = r"\|\|"
+
+# Other Operators
+t_EXCL_NO_WS = r"\!"
+t_QUEST_NO_WS = r"\?"
 
 
-def t_FLOAT(t):
-    r"-\d+\.\d+ | \d+\.\d+"
-    t.value = float(t.value)
-    return t
-
-
-def t_DIGIT(t):
+# Literals
+def t_INTEGER_LITERAL(t):
     r"-\d+ | \d+"
     t.value = int(t.value)
     return t
 
 
-def t_BOOLEAN(t):
-    r"true|false"
+def t_FLOAT_LITERAL(t):
+    r"-\d+\.\d+ | \d+\.\d+"
+    t.value = float(t.value)
+    return t
+
+
+def t_BOOLEAN_LITERAL(t):
+    r"true | false"
     t.value = bool(t.value)
     return t
 
 
-def t_NULL(t):
+def t_CHARACTER_LITERAL(t):
+    r"\'(\\.|[^\\\'\n\r])*\'"
+    t.value = str(t.value)
+    return t
+
+
+def t_NULL_LITERAL(t):
     r"null"
     t.value = None
     return t
 
 
-def t_ID(t):
-    r"[a-zA-Z_][a-zA-Z_0-9]*"
-    t.type = keywords.get(t.value, "ID")
+# Strings
+t_LINE_STR_TEXT = r"\".*\""
+t_MULTI_LINE_STR_TEXT = r"\"\"\".*\"\"\""
+
+
+# Identifiers
+def t_IDENTIFIER(t):
+    r"[a-zA-Z_][a-zA-Z0-9_]*"
+    t.type = keywords.get(t.value, "IDENTIFIER")
     return t
 
 
+# Comments
 def t_line_comment(t):
     r"\/\/.*"
     pass
@@ -137,21 +115,26 @@ def t_delimited_comment(t):
     pass
 
 
+# Newline
 def t_newline(t):
     r"\r?\n"
     t.lexer.lineno += len(t.value)
 
 
+# Whitespace
 t_ignore = " \t"
 
 
+# Error handling rule
 def t_error(t):
     print("Illegal character '%s'" % t.value[0])
     t.lexer.skip(1)
 
 
+# Build the lexer
 lexer = lex.lex()
 lexer.level = 0
+
 
 file = open("source_code.kt", "r")
 
