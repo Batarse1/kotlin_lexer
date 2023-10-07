@@ -62,17 +62,16 @@ t_QUEST_NO_WS = r"\?"
 
 
 # Literals
-def t_INTEGER_LITERAL(t):
-    r"-\d+ | \d+"
-    t.value = int(t.value)
-    return t
-
-
 def t_FLOAT_LITERAL(t):
     r"-\d+\.\d+ | \d+\.\d+"
     t.value = float(t.value)
     return t
 
+
+def t_INTEGER_LITERAL(t):
+    r"-\d+ | \d+"
+    t.value = int(t.value)
+    return t
 
 def t_BOOLEAN_LITERAL(t):
     r"true | false"
