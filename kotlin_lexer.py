@@ -160,3 +160,6 @@ print(ply_table)
 
 generate_symbols_table(lexer_tokens)
 print_table()
+
+# This is only for the executable file
+input("Press anything to exit.")
