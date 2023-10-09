@@ -5,7 +5,17 @@ symbols_table = PrettyTable()
 symbols_table.field_names = ["Type", "Value", "ID", "level"]
 
 variables = ["VAL", "VAR"]
-values = ["LINE_STR_TEXT","CHARACTER_LITERAL","INTEGER_LITERAL","FLOAT_LITERAL","MULT", "DIV", "ADD", "SUB","BOOLEAN_LITERAL"]
+values = [
+    "LINE_STR_TEXT",
+    "CHARACTER_LITERAL",
+    "INTEGER_LITERAL",
+    "FLOAT_LITERAL",
+    "MULT",
+    "DIV",
+    "ADD",
+    "SUB",
+    "BOOLEAN_LITERAL",
+]
 types = [
     "Int",
     "Float",
@@ -26,14 +36,15 @@ errors = 0
 
 symbols_map = {}
 
+
 def concatenate_values(lexer_tokens, i, remaining):
-    j = 0                
+    j = 0
     value = []
     row_type = ""
     row_id = lexer_tokens[i + 1]["value"]
 
     while lexer_tokens[i + remaining + j]["type"] in values:
-        if(len(row_type) == 0):
+        if len(row_type) == 0:
             row_type = typeMap[type(lexer_tokens[i + remaining + j]["value"])]
 
         value.append(lexer_tokens[i + remaining + j]["value"])
@@ -41,21 +52,22 @@ def concatenate_values(lexer_tokens, i, remaining):
             break
 
         j += 1
-    
-    if row_type == "String" and len(lexer_tokens[i + remaining]["value"]) == 3:
+
+    if row_type == "String" and len(lexer_tokens[i + remaining + j]["value"]) == 3:
         row_type = "Char"
- 
-    row_value = ' '.join(map(str,value))
+
+    row_value = " ".join(map(str, value))
     row_level = lexer_tokens[i]["level"]
 
-    symbols_map[row_value] = {
-        "id": row_id,
+    symbols_map[row_id] = {
+        "value": row_value,
         "level": row_level,
         "type": row_type,
     }
 
     return j
-    
+
+
 def generate_symbols_table(lexer_tokens):
     i = 0
     global errors
@@ -63,14 +75,14 @@ def generate_symbols_table(lexer_tokens):
         if lexer_tokens[i]["type"] in variables:
             if lexer_tokens[i + 1]["type"] == "IDENTIFIER":
                 if lexer_tokens[i + 2]["type"] == "ASSIGNMENT":
-                    j = concatenate_values(lexer_tokens,i,3) 
+                    j = concatenate_values(lexer_tokens, i, 3)
                     i += 3 + j
 
                     continue
                 elif lexer_tokens[i + 2]["type"] == "COLON":
                     if lexer_tokens[i + 3]["value"] in types:
                         if lexer_tokens[i + 4]["type"] == "ASSIGNMENT":
-                            j = concatenate_values(lexer_tokens,i,5)
+                            j = concatenate_values(lexer_tokens, i, 5)
                             i += 5 + j
 
                             continue
@@ -103,7 +115,7 @@ def print_errors():
 
 def print_table():
     for key, value in symbols_map.items():
-        symbols_table.add_row([value["type"], key, value["id"], value["level"]])
+        symbols_table.add_row([value["type"], value["value"], key, value["level"]])
     print("Symbols Table")
     print(symbols_table)
     print_errors()
