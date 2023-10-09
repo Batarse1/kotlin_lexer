@@ -1,6 +1,22 @@
-val num = 23.2 + 5 + 23.4 + 2
-var num2 = 4 + "hola"
-val nombre = "Carlos"
-var falso = true
-val algo : Int = 1 + 33 + 12
-val nombre2 : String = "carlos" + "batar"
+var a: String = "initial"  // 1
+val b: Int = 1             // 2
+val c = 3                  // 3
+println(a)
+
+fun main() {
+    print("hello world")
+}
+
+fun printProduct() {
+    val x = 1
+    val y : Int = 2
+    val error = "Error!"
+
+    // check values
+    if (x == 1 && y == 2) {
+        println(x * y)
+    }
+    else {
+        println(error)
+    }
+}
